@@ -1,5 +1,13 @@
 {
   "expo": {
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "cameraPermission": "The app accesses your photos to let you attach them with your todos."
+        }
+      ]
+    ],
     "name": "part-two-final",
     "scheme": "part-two-final",
     "slug": "part-two-final",
@@ -26,6 +34,6 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
   }
 }
