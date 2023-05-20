@@ -1,7 +1,7 @@
-import { FlatList, View } from 'react-native';
+import { Alert, FlatList, View } from 'react-native';
 import { supabase } from '../../lib/supabase';
 import { useEffect, useState } from 'react';
-import { Text } from 'react-native-paper';
+import { Checkbox, Text } from 'react-native-paper';
 
 export default function HomeScreen() {
     const [todos, setTodos] = useState([]);
@@ -29,10 +29,28 @@ export default function HomeScreen() {
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <FlatList
                 data={todos}
-                renderItem={({ item }) => <Text>{item.task}</Text>}
+                renderItem={({ item }) => <TodoItem todo={item} />}
                 onRefresh={() => setRefreshing(true)}
                 refreshing={refreshing}
             />
         </View>
     );
+}
+
+function TodoItem({ todo }) {
+    const [checked, setChecked] = useState(todo.is_complete)
+    const handlePress = async () => {
+        const { error } = await supabase.from('todos').update({ is_complete: !checked }).eq('id', todo.id)
+        if (error != null) {
+            Alert.alert(error.message);
+        }
+        setChecked(!checked)
+
+    }
+    return (
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text>{todo.task}</Text>
+            <Checkbox.Android status={checked ? 'checked' : 'unchecked'} onPress={handlePress} />
+        </View>
+    )
 }

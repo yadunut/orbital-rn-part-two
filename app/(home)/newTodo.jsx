@@ -20,7 +20,7 @@ export default function NewTodo() {
         const { error } = await supabase.from('todos').insert({ task: title, user_id: user.id }).select().single();
 
         if (error != null) {
-            setErrMsg(error);
+            setErrMsg(error.message);
             return;
         }
         router.push('/');
