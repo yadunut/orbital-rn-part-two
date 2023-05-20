@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "part-two-final",
+    "scheme": "part-two-final",
     "slug": "part-two-final",
     "version": "1.0.0",
     "orientation": "portrait",
