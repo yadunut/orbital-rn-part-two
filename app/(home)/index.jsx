@@ -1,7 +1,8 @@
-import { Alert, FlatList, View } from 'react-native';
+import { Alert, FlatList, Pressable, View } from 'react-native';
 import { supabase } from '../../lib/supabase';
 import { useEffect, useState } from 'react';
 import { Checkbox, Text } from 'react-native-paper';
+import { useRouter } from 'expo-router';
 
 export default function HomeScreen() {
     const [todos, setTodos] = useState([]);
@@ -39,18 +40,21 @@ export default function HomeScreen() {
 
 function TodoItem({ todo }) {
     const [checked, setChecked] = useState(todo.is_complete)
-    const handlePress = async () => {
+    const router = useRouter();
+    const handleCheckboxPress = async () => {
         const { error } = await supabase.from('todos').update({ is_complete: !checked }).eq('id', todo.id)
         if (error != null) {
             Alert.alert(error.message);
         }
         setChecked(!checked)
-
+    }
+    const handleItemPress = () => {
+        router.push({ pathname: '/detailedTodo', params: { id: todo.id } })
     }
     return (
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <Pressable style={{ flexDirection: 'row', alignItems: 'center' }} onPress={handleItemPress}>
             <Text>{todo.task}</Text>
-            <Checkbox.Android status={checked ? 'checked' : 'unchecked'} onPress={handlePress} />
-        </View>
+            <Checkbox.Android status={checked ? 'checked' : 'unchecked'} onPress={handleCheckboxPress} />
+        </Pressable>
     )
 }
